@@ -1,6 +1,6 @@
 # Piano tune
 
-A web based online-pianist.
+A web based online-pianist: [video](https://youtu.be/dCmryQGHrns).
 
 ## Installation
 
@@ -13,7 +13,8 @@ $ yarn run
 
 ## TODO
 
-- Visualization of the track _à la_ guitar hero
+- Visualization of the keyboard
+- Animations
 
 ## Credentials
 

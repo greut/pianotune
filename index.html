@@ -10,13 +10,20 @@
     // Pixi.js
     var width = 800
     var height = 600
+    var scale = 50
+    var keyboard = 100
     var app = new Pixi.Application(width, height, {backgroundColor: 0x222222})
     document.body.appendChild(app.view)
 
     var graphics = new Pixi.Graphics()
     graphics.beginFill(0xffffff)
 
+    var line = new Pixi.Graphics()
+    line.beginFill(0xff0000, .5)
+    line.drawRect(0, 0, width, keyboard)
+
     app.stage.addChild(graphics)
+    app.stage.addChild(line)
 
     // Tone.js
     var synth = new Tone.PolySynth(8, Tone.Synth, {
@@ -39,12 +46,11 @@
         Tone.Transport.bpm.value = midi.bpm
         Tone.Transport.timeSignature = midi.timeSignature
 
-        var scale = 50
         midi.tracks.forEach(function(track) {
             var w = width / 127
             track.notes.forEach(function(note) {
                 var x = (note.midi / 127) * width
-                var y = note.time * scale
+                var y = keyboard + note.time * scale
                 var h = note.duration * scale
                 graphics.drawRect(x, y, w, h)
             })
@@ -53,4 +59,10 @@
 
         Tone.Transport.start()
     })
+
+    ;(function update() {
+        requestAnimationFrame(update)
+
+        graphics.y = -Tone.Transport.seconds * scale
+    })()
 </script>
