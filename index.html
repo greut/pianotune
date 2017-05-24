@@ -3,8 +3,22 @@
 <meta charset="utf-8">
 <title>pianotune</title>
 
+<h1>Pianotune</h1>
+
 <script src="dist/vendor.min.js"></script>
 <script>
+    // Pixi.js
+    var width = 800
+    var height = 600
+    var app = new Pixi.Application(width, height, {backgroundColor: 0x222222})
+    document.body.appendChild(app.view)
+
+    var graphics = new Pixi.Graphics()
+    graphics.beginFill(0xffffff)
+
+    app.stage.addChild(graphics)
+
+    // Tone.js
     var synth = new Tone.PolySynth(8, Tone.Synth, {
         oscillator: {
             type: "sine3"
@@ -25,7 +39,15 @@
         Tone.Transport.bpm.value = midi.bpm
         Tone.Transport.timeSignature = midi.timeSignature
 
+        var scale = 50
         midi.tracks.forEach(function(track) {
+            var w = width / 127
+            track.notes.forEach(function(note) {
+                var x = (note.midi / 127) * width
+                var y = note.time * scale
+                var h = note.duration * scale
+                graphics.drawRect(x, y, w, h)
+            })
             new Tone.Part(playNote, track.notes).start(0)
         })
 
